@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Number Predictor!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles & CSS Variables --- */
+        :root {
+            /* Default Theme (Mystic Purple/Gold) */
+            --bg-color: #FAF5FF; /* purple-50 */
+            --main-container-bg: #ffffff;
+            --main-container-border: #6B46C1; /* purple-700 */
+            --main-container-shadow: #6B46C1;
+            --step-card-bg: #FEFCBF; /* yellow-100 */
+            --step-card-border: #F6E05E; /* yellow-400 */
+            --step-card-shadow: #ECC94B; /* yellow-500 */
+            --choice-bg: #E9D8FD; /* purple-200 */
+            --choice-border: #B794F4; /* purple-400 */
+            --choice-text: #5A67D8; /* indigo-600 */
+            --choice-hover-bg: #D6BCFA; /* purple-300 */
+            --choice-selected-bg: #9F7AEA; /* purple-500 */
+            --choice-selected-border: #6B46C1; /* purple-700 */
+            --choice-selected-text: #FAF5FF; /* purple-50 */
+            --action-button-text: white;
+            --action-button-border: #5A67D8; /* indigo-600 */
+            --action-button-shadow: #5A67D8;
+            --action-button-hover-shadow: #4C51BF; /* indigo-700 */
+            --action-button-active-shadow: #5A67D8;
+            --charge-button-bg: #ECC94B; /* yellow-500 */
+            --charge-button-hover-bg: #D69E2E; /* yellow-600 */
+            --charge-button-active-bg: #B7791F; /* yellow-700 */
+            --reset-button-bg: #4FD1C5; /* teal-400 */
+            --reset-button-hover-bg: #38B2AC; /* teal-500 */
+            --reset-button-active-bg: #319795; /* teal-600 */
+            --result-area-bg: #FEFCBF; /* yellow-100 */
+            --result-area-border: #F6E05E; /* yellow-400 */
+            --result-area-shadow: #ECC94B; /* yellow-500 */
+            --result-text-color: #B7791F; /* yellow-800 */
+            --predicted-number-text: #744210; /* yellow-900 */
+            --thinking-text-color: #975A16; /* yellow-800 */
+            --heading-color: #6B46C1; /* purple-700 */
+            --subheading-color: #5A67D8; /* indigo-600 */
+            --step-heading-color: #718096; /* gray-600 */
+            --question-text-color: #5A67D8;
+            --label-color: #6B46C1;
+            --footer-text-color: #718096; /* gray-600 */
+            --focus-ring-color: var(--charge-button-bg);
+            --theme-selector-bg: #FEFCBF;
+            --theme-selector-border: #F6E05E;
+            --theme-selector-text: #B7791F;
+        }
+
+        /* --- Theme Definitions --- */
+        body[data-theme="ocean-blue"] { --bg-color: #E0F2FE; --main-container-bg: #ffffff; --main-container-border: #075985; --main-container-shadow: #075985; --step-card-bg: #CFFAFE; --step-card-border: #67E8F9; --step-card-shadow: #22D3EE; --choice-bg: #A5F3FC; --choice-border: #67E8F9; --choice-text: #155E75; --choice-hover-bg: #67E8F9; --choice-selected-bg: #22D3EE; --choice-selected-border: #0E7490; --choice-selected-text: #164E63; --action-button-border: #075985; --action-button-shadow: #075985; --action-button-hover-shadow: #075985; --action-button-active-shadow: #075985; --charge-button-bg: #38BDF8; --charge-button-hover-bg: #0EA5E9; --charge-button-active-bg: #0284C7; --reset-button-bg: #2DD4BF; --reset-button-hover-bg: #14B8A6; --reset-button-active-bg: #0D9488; --result-area-bg: #A5F3FC; --result-area-border: #67E8F9; --result-area-shadow: #22D3EE; --result-text-color: #164E63; --predicted-number-text: #083344; --thinking-text-color: #155E75; --heading-color: #0C4A6E; --subheading-color: #155E75; --step-heading-color: #0369A1; --question-text-color: #1E40AF; --label-color: #155E75; --footer-text-color: #0369A1; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #A5F3FC; --theme-selector-border: #67E8F9; --theme-selector-text: #155E75; }
+        body[data-theme="forest-green"] { --bg-color: #F0FFF4; --main-container-bg: #ffffff; --main-container-border: #2F855A; --main-container-shadow: #2F855A; --step-card-bg: #FEFCBF; --step-card-border: #F6E05E; --step-card-shadow: #ECC94B; --choice-bg: #C6F6D5; --choice-border: #68D391; --choice-text: #22543D; --choice-hover-bg: #9AE6B4; --choice-selected-bg: #48BB78; --choice-selected-border: #2F855A; --choice-selected-text: #F0FFF4; --action-button-border: #276749; --action-button-shadow: #276749; --action-button-hover-shadow: #22543D; --action-button-active-shadow: #276749; --charge-button-bg: #ECC94B; --charge-button-hover-bg: #D69E2E; --charge-button-active-bg: #B7791F; --reset-button-bg: #4FD1C5; --reset-button-hover-bg: #38B2AC; --reset-button-active-bg: #319795; --result-area-bg: #FEFCBF; --result-area-border: #F6E05E; --result-area-shadow: #ECC94B; --result-text-color: #B7791F; --predicted-number-text: #744210; --thinking-text-color: #975A16; --heading-color: #2F855A; --subheading-color: #276749; --step-heading-color: #718096; --question-text-color: #22543D; --label-color: #276749; --footer-text-color: #718096; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #FEFCBF; --theme-selector-border: #F6E05E; --theme-selector-text: #B7791F; }
+        body[data-theme="cosmic-purple"] { --bg-color: #FAF5FF; --main-container-bg: #1E1B4B; --main-container-border: #A78BFA; --main-container-shadow: #A78BFA; --step-card-bg: #3730A3; --step-card-border: #C4B5FD; --step-card-shadow: #A78BFA; --choice-bg: #4338CA; --choice-border: #A78BFA; --choice-text: #EEF2FF; --choice-hover-bg: #5B21B6; --choice-selected-bg: #7C3AED; --choice-selected-border: #C4B5FD; --choice-selected-text: #F5F3FF; --action-button-text: #1E1B4B; --action-button-border: #A78BFA; --action-button-shadow: #A78BFA; --action-button-hover-shadow: #A78BFA; --action-button-active-shadow: #A78BFA; --charge-button-bg: #F472B6; --charge-button-hover-bg: #EC4899; --charge-button-active-bg: #DB2777; --reset-button-bg: #A78BFA; --reset-button-hover-bg: #8B5CF6; --reset-button-active-bg: #7C3AED; --result-area-bg: #4338CA; --result-area-border: #A78BFA; --result-area-shadow: #A78BFA; --result-text-color: #C4B5FD; --predicted-number-text: #EDE9FE; --thinking-text-color: #A78BFA; --heading-color: #EDE9FE; --subheading-color: #C4B5FD; --step-heading-color: #DDD6FE; --question-text-color: #DDD6FE; --label-color: #C4B5FD; --footer-text-color: #A78BFA; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #4338CA; --theme-selector-border: #A78BFA; --theme-selector-text: #EEF2FF; }
+        body[data-theme="sunny-yellow"] { --bg-color: #FEF9C3; --main-container-bg: #ffffff; --main-container-border: #CA8A04; --main-container-shadow: #CA8A04; --step-card-bg: #FEF08A; --step-card-border: #FACC15; --step-card-shadow: #EAB308; --choice-bg: #FEF3C7; --choice-border: #FDE047; --choice-text: #854D0E; --choice-hover-bg: #FDE047; --choice-selected-bg: #FACC15; --choice-selected-border: #CA8A04; --choice-selected-text: #78350F; --action-button-border: #CA8A04; --action-button-shadow: #CA8A04; --action-button-hover-shadow: #CA8A04; --action-button-active-shadow: #CA8A04; --charge-button-bg: #FB923C; --charge-button-hover-bg: #F97316; --charge-button-active-bg: #EA580C; --reset-button-bg: #FACC15; --reset-button-hover-bg: #EAB308; --reset-button-active-bg: #CA8A04; --result-area-bg: #FEF3C7; --result-area-border: #FDE047; --result-area-shadow: #EAB308; --result-text-color: #854D0E; --predicted-number-text: #713F12; --thinking-text-color: #A16207; --heading-color: #B45309; --subheading-color: #A16207; --step-heading-color: #B45309; --question-text-color: #B45309; --label-color: #A16207; --footer-text-color: #B45309; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #FEF3C7; --theme-selector-border: #FDE047; --theme-selector-text: #854D0E; }
+        body[data-theme="candy-pink"] { --bg-color: #FDF2F8; --main-container-bg: #ffffff; --main-container-border: #9D174D; --main-container-shadow: #9D174D; --step-card-bg: #FCE7F3; --step-card-border: #F9A8D4; --step-card-shadow: #F472B6; --choice-bg: #FBCFE8; --choice-border: #F9A8D4; --choice-text: #9D174D; --choice-hover-bg: #F9A8D4; --choice-selected-bg: #F472B6; --choice-selected-border: #DB2777; --choice-selected-text: #831843; --action-button-border: #9D174D; --action-button-shadow: #9D174D; --action-button-hover-shadow: #9D174D; --action-button-active-shadow: #9D174D; --charge-button-bg: #A78BFA; --charge-button-hover-bg: #8B5CF6; --charge-button-active-bg: #7C3AED; --reset-button-bg: #F472B6; --reset-button-hover-bg: #EC4899; --reset-button-active-bg: #DB2777; --result-area-bg: #FBCFE8; --result-area-border: #F9A8D4; --result-area-shadow: #F472B6; --result-text-color: #9D174D; --predicted-number-text: #831843; --thinking-text-color: #BE185D; --heading-color: #831843; --subheading-color: #BE185D; --step-heading-color: #DB2777; --question-text-color: #BE185D; --label-color: #BE185D; --footer-text-color: #9D174D; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #FBCFE8; --theme-selector-border: #F9A8D4; --theme-selector-text: #9D174D; }
+        body[data-theme="night-mode"] { --bg-color: #111827; --main-container-bg: #1F2937; --main-container-border: #6B7280; --main-container-shadow: #9CA3AF; --step-card-bg: #374151; --step-card-border: #9CA3AF; --step-card-shadow: #D1D5DB; --choice-bg: #4B5563; --choice-border: #9CA3AF; --choice-text: #F9FAFB; --choice-hover-bg: #52525b; --choice-selected-bg: #6B7280; --choice-selected-border: #D1D5DB; --choice-selected-text: #F9FAFB; --action-button-text: #111827; --action-button-border: #9CA3AF; --action-button-shadow: #9CA3AF; --action-button-hover-shadow: #D1D5DB; --action-button-active-shadow: #6B7280; --charge-button-bg: #60A5FA; --charge-button-hover-bg: #3B82F6; --charge-button-active-bg: #2563EB; --reset-button-bg: #34D399; --reset-button-hover-bg: #10B981; --reset-button-active-bg: #059669; --result-area-bg: #4B5563; --result-area-border: #9CA3AF; --result-area-shadow: #D1D5DB; --result-text-color: #ECFDF5; --predicted-number-text: #f0fdf4; --thinking-text-color: #D1D5DB; --heading-color: #F9FAFB; --subheading-color: #E5E7EB; --step-heading-color: #D1D5DB; --question-text-color: #E5E7EB; --label-color: #E5E7EB; --footer-text-color: #9CA3AF; --focus-ring-color: var(--charge-button-bg); --theme-selector-bg: #4B5563; --theme-selector-border: #9CA3AF; --theme-selector-text: #F9FAFB; }
+
+        /* --- General Styles --- */
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding-top: 5rem; /* Space for theme selector */
+            position: relative;
+            transition: background-color 0.3s ease;
+            overflow-x: hidden;
+        }
+        main { flex-grow: 1; }
+
+        .main-container {
+            background-color: var(--main-container-bg);
+            border: 3px solid var(--main-container-border);
+            border-radius: 20px;
+            box-shadow: 8px 8px 0px var(--main-container-shadow);
+            width: 100%;
+            max-width: 48rem; /* Adjusted width */
+            margin: 2rem auto 1rem auto; /* Default margin */
+            padding: 1.5rem sm:p-8;
+            text-align: center;
+            flex-shrink: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Step Card Styling */
+        .step-card {
+            background-color: var(--step-card-bg);
+            border: 2px solid var(--step-card-border);
+            border-radius: 16px;
+            box-shadow: 4px 4px 0px var(--step-card-shadow);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step-heading {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--step-heading-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px dashed var(--step-card-border);
+        }
+
+        /* Choice Button Styling (Symbols) */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust min width for symbols */
+            gap: 1rem;
+            justify-items: center;
+        }
+        .choice-button {
+            background-color: var(--choice-bg);
+            color: var(--choice-text);
+            border: 2px solid var(--choice-border);
+            border-radius: 50%; /* Make symbol buttons round */
+            padding: 1rem; /* Adjust padding */
+            font-weight: 600;
+            font-size: 2.5rem; /* Larger emoji */
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            width: 80px; /* Fixed width */
+            height: 80px; /* Fixed height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 0px var(--choice-border);
+            line-height: 1; /* Ensure emoji is centered */
+        }
+        .choice-button:hover {
+            background-color: var(--choice-hover-bg);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 4px 4px 0px var(--choice-border);
+        }
+        .choice-button.selected {
+            background-color: var(--choice-selected-bg);
+            border-color: var(--choice-selected-border);
+            color: var(--choice-selected-text);
+            box-shadow: 2px 2px 0px var(--choice-selected-border);
+            transform: translateY(1px) scale(0.95);
+        }
+
+        /* Action Button Styles */
+        .action-button {
+            color: var(--action-button-text); font-weight: 700; padding: 0.8rem 1.8rem; border-radius: 1rem; border: 3px solid var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); transition: all 0.15s ease-out; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 1rem; min-width: 120px; transform-style: preserve-3d;
+        }
+        .action-button:hover { box-shadow: 6px 6px 0px var(--action-button-hover-shadow); transform: translateY(-3px) translateX(-2px) translateZ(5px); }
+        .action-button:active { box-shadow: 2px 2px 0px var(--action-button-active-shadow); transform: translateY(2px) translateX(2px) translateZ(0px); }
+        .action-button:focus { outline: none; box-shadow: 5px 5px 0px var(--action-button-shadow), 0 0 0 3px var(--bg-color), 0 0 0 5px var(--focus-ring-color); }
+        .action-button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: 5px 5px 0px var(--action-button-shadow); transform: none; }
+
+        /* Charge Button Specific Styles */
+        #chargeBtn { background-color: var(--charge-button-bg); border-color: var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); --focus-ring-color: var(--charge-button-bg); }
+        #chargeBtn:hover:not(:disabled) { background-color: var(--charge-button-hover-bg); box-shadow: 6px 6px 0px var(--action-button-hover-shadow); }
+        #chargeBtn:active:not(:disabled) { background-color: var(--charge-button-active-bg); box-shadow: 2px 2px 0px var(--action-button-active-shadow); transform: translateY(1px) translateX(1px) scale(0.98); /* Subtle press effect */ }
+        /* Animation for charge button */
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        #chargeBtn.charging { animation: pulse 0.5s infinite ease-in-out; }
+
+
+        #resetBtn { background-color: var(--reset-button-bg); border-color: var(--action-button-border); box-shadow: 5px 5px 0px var(--action-button-shadow); --focus-ring-color: var(--reset-button-bg); }
+        #resetBtn:hover { background-color: var(--reset-button-hover-bg); box-shadow: 6px 6px 0px var(--action-button-hover-shadow); }
+        #resetBtn:active { background-color: var(--reset-button-active-bg); box-shadow: 2px 2px 0px var(--action-button-active-shadow); }
+
+
+        /* Result Area Styles */
+        #resultArea {
+            background-color: var(--result-area-bg); border: 2px dashed var(--result-area-border); border-radius: 16px; box-shadow: 4px 4px 0px var(--result-area-shadow); padding: 1.5rem; margin-top: 2rem; min-height: 150px; text-align: center; transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; opacity: 0; transform: scale(0.9) rotate(-2deg); display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #resultArea.visible { opacity: 1; transform: scale(1) rotate(0deg); animation: reveal 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+        #resultText { font-size: 1.3rem; font-weight: 600; color: var(--result-text-color); margin-bottom: 0.5rem; transition: color 0.3s ease; line-height: 1.4; }
+        #predictedNumber { font-size: 4rem; font-weight: 700; margin: 0.5rem 0 1rem 0; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; color: var(--predicted-number-text); background-color: rgba(255, 255, 255, 0.3); line-height: 1; }
+        #thinkingText { font-style: italic; color: var(--thinking-text-color); transition: color 0.3s ease; font-size: 1.1rem; margin-bottom: 1rem; }
+
+        /* Headings & Labels */
+        .main-heading { color: var(--heading-color); transition: color 0.3s ease; padding-top: 1rem; /* Default padding */ }
+        .sub-heading { color: var(--subheading-color); transition: color 0.3s ease; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem; }
+        .step-heading { font-size: 1rem; font-weight: 600; color: var(--step-heading-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px dashed var(--step-card-border); }
+
+        /* Footer Styling */
+        .page-footer { text-align: center; padding: 1rem 0; margin-top: 1rem; font-size: 0.8rem; color: var(--footer-text-color); flex-shrink: 0; line-height: 1.5; transition: color 0.3s ease; }
+        .page-footer p { margin-bottom: 0.25rem; }
+
+        /* Theme Selector Styles */
+        .theme-selector-container { position: absolute; top: 1rem; right: 1rem; z-index: 10; }
+        .theme-selector-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        #themeSelector { padding: 0.4rem 0.8rem; border-radius: 8px; border: 2px solid var(--theme-selector-border); background-color: var(--theme-selector-bg); color: var(--theme-selector-text); font-weight: 500; cursor: pointer; box-shadow: 2px 2px 0px var(--theme-selector-border); transition: all 0.2s ease; vertical-align: middle; font-size: 0.8rem; }
+        #themeSelector:focus { outline: none; box-shadow: 2px 2px 0px var(--theme-selector-border), 0 0 0 3px var(--main-container-bg), 0 0 0 5px var(--theme-selector-border); }
+
+        /* Dark Theme Adjustments */
+        body[data-theme="cosmic-purple"] .main-heading svg,
+        body[data-theme="night-mode"] .main-heading svg { color: #F687B3; /* pink-400 */ }
+        body[data-theme="cosmic-purple"] .sub-heading,
+        body[data-theme="night-mode"] .sub-heading { color: #D1D5DB; }
+        body[data-theme="cosmic-purple"] #themeSelector:focus,
+        body[data-theme="night-mode"] #themeSelector:focus { box-shadow: 2px 2px 0px var(--theme-selector-border), 0 0 0 3px var(--main-container-bg), 0 0 0 5px var(--theme-selector-border); }
+        body[data-theme="cosmic-purple"] #predictedNumber,
+        body[data-theme="night-mode"] #predictedNumber { background-color: rgba(0, 0, 0, 0.2); color: #FFF; }
+
+
+        /* Hide class utility */
+        .hidden { display: none; }
+
+        /* Animation for result reveal */
+        @keyframes reveal { from { transform: scale(0.8) rotate(-5deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+
+    </style>
+</head>
+<body class="p-4 md:p-6">
+
+    <div class="theme-selector-container">
+        <label for="themeSelector" class="theme-selector-label">Choose a Theme:</label>
+        <select id="themeSelector">
+            <option value="default">🎨 Default</option>
+            <option value="ocean-blue">🌊 Ocean Blue</option>
+            <option value="forest-green">🌲 Forest Green</option>
+            <option value="cosmic-purple">✨ Cosmic Purple</option>
+            <option value="sunny-yellow">☀️ Sunny Yellow</option>
+            <option value="candy-pink">🍬 Candy Pink</option>
+            <option value="night-mode">🌙 Night Mode</option>
+        </select>
+    </div>
+
+    <main>
+        <div class="main-container">
+            <h1 class="main-heading text-3xl sm:text-4xl font-bold text-center mb-4 tracking-tight flex items-center justify-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 text-green-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                 </svg>
+                 Lucky Number Predictor <span class="text-2xl">🍀</span>
+            </h1>
+
+            <p class="sub-heading text-center mb-8">Pick a magic symbol, charge up the crystal ball, and discover your lucky number for today! ✨</p>
+
+            <div id="step1" class="step-card">
+                <h2 class="step-heading">Step 1: Choose Your Symbol</h2>
+                <div class="choices-grid" id="symbolChoices">
+                    <button class="choice-button" data-value="0">⭐</button>
+                    <button class="choice-button" data-value="1">💖</button>
+                    <button class="choice-button" data-value="2">💎</button>
+                    <button class="choice-button" data-value="3">☀️</button>
+                    <button class="choice-button" data-value="4">🌙</button>
+                </div>
+            </div>
+
+            <div id="step2" class="step-card hidden">
+                <h2 class="step-heading">Step 2: Charge the Crystal Ball!</h2>
+                <p id="chargeInstructions" class="mb-4 text-lg font-medium" style="color: var(--subheading-color);">Click the button <span id="clicksNeeded" class="font-bold text-xl">?</span> times!</p>
+                <button id="chargeBtn" class="action-button text-2xl p-6 rounded-full">🔮</button>
+                <p id="clicksRemaining" class="mt-3 text-sm font-semibold" style="color: var(--label-color);"></p>
+            </div>
+
+
+            <div id="resultArea" class="hidden">
+                <p id="thinkingText">🔮 Gazing into the future...</p>
+                <p id="resultText"></p>
+                <div id="predictedNumber" class="hidden">#</div>
+                <button id="resetBtn" class="action-button mt-4">Try Again? 🔁</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <p>© 2025 ToolForge. All rights reserved.</p>
+        <p>Built with ❤️ by Anas.</p>
+    </footer>
+
+    <script>
+        // --- DOM Elements ---
+        const step1Div = document.getElementById('step1');
+        const step2Div = document.getElementById('step2');
+        const symbolChoicesContainer = document.getElementById('symbolChoices');
+        const chargeBtn = document.getElementById('chargeBtn');
+        const clicksNeededSpan = document.getElementById('clicksNeeded');
+        const clicksRemainingP = document.getElementById('clicksRemaining');
+        const resultArea = document.getElementById('resultArea');
+        const thinkingText = document.getElementById('thinkingText');
+        const resultText = document.getElementById('resultText');
+        const predictedNumberDiv = document.getElementById('predictedNumber');
+        const resetBtn = document.getElementById('resetBtn');
+        const themeSelector = document.getElementById('themeSelector');
+
+        // --- Game State ---
+        let chosenSymbolIndex = null;
+        let clicksNeeded = 0;
+        let clicksMade = 0;
+        const MIN_CLICKS = 3;
+        const MAX_CLICKS = 7;
+        const MAX_LUCKY_NUMBER = 20; // Predict numbers between 1 and 20
+
+        // --- Functions ---
+
+        /** Handles clicks on symbol buttons. */
+        function handleSymbolChoice(event) {
+            const button = event.target.closest('.choice-button');
+            if (!button) return;
+
+            chosenSymbolIndex = parseInt(button.dataset.value); // Store the index (0-4)
+
+            // Update styling
+            const allButtons = symbolChoicesContainer.querySelectorAll('.choice-button');
+            allButtons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            // Proceed to next step
+            prepareChargeStep();
+            step1Div.classList.add('hidden');
+            step2Div.classList.remove('hidden');
+        }
+
+        /** Sets up the charge step with a random click requirement. */
+        function prepareChargeStep() {
+            clicksNeeded = Math.floor(Math.random() * (MAX_CLICKS - MIN_CLICKS + 1)) + MIN_CLICKS;
+            clicksMade = 0;
+            clicksNeededSpan.textContent = clicksNeeded;
+            clicksRemainingP.textContent = `${clicksNeeded} clicks to go!`;
+            chargeBtn.disabled = false;
+            chargeBtn.classList.remove('charging'); // Ensure animation is off initially
+        }
+
+        /** Handles clicks on the charge button. */
+        function handleChargeClick() {
+            if (clicksMade >= clicksNeeded) return; // Should not happen if button disabled
+
+            clicksMade++;
+            clicksRemainingP.textContent = `${clicksNeeded - clicksMade} clicks to go!`;
+
+            // Add pulsing effect
+            chargeBtn.classList.add('charging');
+            setTimeout(() => chargeBtn.classList.remove('charging'), 200); // Pulse duration
+
+            if (clicksMade === clicksNeeded) {
+                chargeBtn.disabled = true;
+                clicksRemainingP.textContent = "Charged up! ✨";
+                // Short delay before showing prediction
+                setTimeout(runPrediction, 500);
+            }
+        }
+
+        /** Calculates and displays the lucky number. */
+        function predictLuckyNumber() {
+            const dayOfMonth = new Date().getDate(); // Get current day (1-31)
+            // Simple formula combining symbol, clicks, and day
+            const luckyNumber = (chosenSymbolIndex * 3 + clicksMade * 2 + dayOfMonth) % MAX_LUCKY_NUMBER + 1;
+            return luckyNumber;
+        }
+
+        /** Runs the prediction display process. */
+        function runPrediction() {
+            step2Div.classList.add('hidden');    // Hide charge step
+            resultArea.classList.remove('hidden'); // Show result area
+            resultText.textContent = '';          // Clear previous result
+            predictedNumberDiv.classList.add('hidden'); // Hide number div initially
+            thinkingText.textContent = '🔮 Gazing into the crystal ball...';
+            thinkingText.style.display = 'block';
+            resultArea.classList.remove('visible'); // Prepare for animation
+
+            setTimeout(() => thinkingText.textContent = '✨ The mists are clearing... ✨', 1200);
+
+            setTimeout(() => {
+                const prediction = predictLuckyNumber();
+
+                thinkingText.style.display = 'none';
+                resultText.textContent = "Your lucky number for today is...";
+                predictedNumberDiv.textContent = prediction;
+                predictedNumberDiv.classList.remove('hidden');
+                resultArea.classList.add('visible'); // Trigger animation
+            }, 2500);
+        }
+
+        /** Resets the game to its initial state. */
+        function resetGame() {
+            chosenSymbolIndex = null;
+            clicksNeeded = 0;
+            clicksMade = 0;
+
+            // Reset UI
+            const allSymbolButtons = symbolChoicesContainer.querySelectorAll('.choice-button');
+            allSymbolButtons.forEach(btn => btn.classList.remove('selected'));
+
+            step1Div.classList.remove('hidden');
+            step2Div.classList.add('hidden');
+            resultArea.classList.add('hidden');
+            resultArea.classList.remove('visible');
+            predictedNumberDiv.classList.add('hidden');
+            chargeBtn.disabled = false; // Re-enable charge button if needed
+             chargeBtn.classList.remove('charging');
+        }
+
+        // --- Theme Switching Logic (With localStorage) ---
+        function applyTheme(themeName) {
+            document.body.dataset.theme = themeName;
+            try { localStorage.setItem('luckyNumberTheme', themeName); }
+            catch (e) { console.warn("Could not save theme preference:", e); }
+        }
+
+        function loadSavedTheme() {
+            let savedTheme = 'default';
+            try { savedTheme = localStorage.getItem('luckyNumberTheme') || 'default'; }
+            catch (e) { console.warn("Could not load theme preference:", e); }
+            themeSelector.value = savedTheme;
+            applyTheme(savedTheme);
+        }
+
+        themeSelector.addEventListener('change', (event) => applyTheme(event.target.value));
+
+        // --- Event Listeners ---
+        symbolChoicesContainer.addEventListener('click', handleSymbolChoice);
+        chargeBtn.addEventListener('click', handleChargeClick);
+        resetBtn.addEventListener('click', resetGame);
+
+        // --- Initial Load ---
+        loadSavedTheme();
+        resetGame(); // Initialize game state
+
+    </script>
+
+</body>
+</html>
